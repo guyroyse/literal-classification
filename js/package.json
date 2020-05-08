@@ -1,0 +1,26 @@
+{
+  "name": "dnd-classinator",
+  "version": "0.1.0",
+  "description": "D&D Classinator recommends classes for your ability rolls.",
+  "scripts": {
+    "test": "mocha",
+    "debug": "node --inspect server.js"
+  },
+  "mocha": {
+    "spec": "spec/**/*-spec.js",
+    "ui": "bdd"
+  },
+  "author": "Guy Royse <guy@guyroyse.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.2",
+    "sinon": "^9.0.2",
+    "sinon-chai": "^3.5.0"
+  }
+}
