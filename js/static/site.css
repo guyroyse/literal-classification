@@ -14,22 +14,40 @@ h1 {
   color: #a52a2a;
 }
 
-td {
-  font-size: 24px;
-  margin: 75px 75px;
+table {
+  margin: 40px auto;
+  border-collapse: collapse;
 }
 
-p {
+td {
   font-size: 24px;
+  padding: 5px;
+  width: 350px;
+}
+
+tr:nth-child(odd) {
+  background-color: #a52a2a54;
+}
+
+td:first-child {
   text-align: left;
 }
 
-select {
-
+td:last-child {
+  text-align: right;
 }
 
-button {
+select {
   font-size: 24px;
-  padding: 25px;
   color: #a52a2a;
+  display: block;
+  margin: 40px auto;
+}
+
+button.classinate {
+  width: 180px;
+  font-size: 24px;
+  padding: 15px 0px;
+  color: #a52a2a;
+  margin: 2px auto;
 }
