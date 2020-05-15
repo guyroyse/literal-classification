@@ -9,10 +9,9 @@ chai.use(sinonChai)
 const Shoe = require('../src/shoe')
 const axios = require('axios')
 
-const QRNG_URL = "https://qrng.anu.edu.au/API/jsonI.php?type=uint8&length=512"
+const QRNG_URL = "http://qrng.anu.edu.au/API/jsonI.php?type=uint8&length=512"
 
 describe("Shoe", function() {
-
   beforeEach(function() {
     sinon.stub(axios, 'get')
     axios.get.resolves({ data: { data: [1, 2, 3] }})
@@ -24,56 +23,42 @@ describe("Shoe", function() {
     sinon.restore()
   })
 
-  context("when started", function() {
+  context("when a number is requested", function() {
     beforeEach(async function() {
-      await this.subject.start()
+      this.number = await this.subject.getNumber()
     })
 
-    it("asks for a big ol' stack of numbers", function() {
+    it("asks for some numbers", function() {
       expect(axios.get).to.have.been.calledOnceWithExactly(QRNG_URL)
     })
 
-    context("when a number is requested", function() {
+    it("return the first number", function() {
+      expect(this.number).to.equal(1)
+    })
+
+    context("when we ask for more numbers", function() {
       beforeEach(async function() {
-        this.number = await this.subject.getNumber()
+        this.number1 = await this.subject.getNumber()
+        this.number2 = await this.subject.getNumber()
       })
 
-      it("return the number", function() {
-        expect(this.number).to.equal(1)
+      it("returns more numbers", function() {
+        expect(this.number1).to.equal(2)
+        expect(this.number2).to.equal(3)
       })
 
-      context("when we ask for another number", function() {
+      context("when we request a number and are out of numbers", function() {
         beforeEach(async function() {
+          axios.get.resetHistory()
           this.number = await this.subject.getNumber()
         })
 
-        it("returns more numbers", function() {
-          expect(this.number).to.equal(2)
+        it("asks for more numbers", function() {
+          expect(axios.get).to.have.been.calledOnceWithExactly(QRNG_URL)
         })
 
-        context("when we request the last number", function() {
-          beforeEach(async function() {
-            axios.get.resetHistory()
-            this.number = await this.subject.getNumber()
-          })
-  
-          it("asks for more numbers", function() {
-            expect(axios.get).to.have.been.calledOnceWithExactly(QRNG_URL)
-          })
-
-          it("returns the last number", function() {
-            expect(this.number).to.equal(3)
-          })
-
-          context("when we one of the newly fetched numbers", function() {
-            beforeEach(async function() {
-              this.number = await this.subject.getNumber()
-            })
-    
-            it("returns the number", function() {
-              expect(this.number).to.equal(1)
-            })
-          })
+        it("returns the next number", function() {
+          expect(this.number).to.equal(1)
         })
       })
     })

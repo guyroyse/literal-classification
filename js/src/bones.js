@@ -1,6 +1,8 @@
+const Shoe = require('./shoe')
+
 class Bones {
-  constructor(shoe) {
-    this.shoe = shoe
+  constructor() {
+    this.shoe = new Shoe()
   }
 
   async roll(quantity) {

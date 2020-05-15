@@ -12,8 +12,8 @@ const Shoe = require('../src/shoe')
 describe("Bones", function() {
 
   beforeEach(function() {
-    this.shoe = sinon.createStubInstance(Shoe)
-    this.subject = new Bones(this.shoe)
+    sinon.stub(Shoe.prototype, 'getNumber')
+    this.subject = new Bones()
   })
 
   afterEach(function () {
@@ -23,26 +23,26 @@ describe("Bones", function() {
   context("when rolling a single die", function() {
 
     afterEach(function() {
-      this.shoe.getNumber.resetBehavior()
+      Shoe.prototype.getNumber.resetBehavior()
     })
 
     it("can roll a 1", async function() {
-      this.shoe.getNumber.resolves(0)
+      Shoe.prototype.getNumber.resolves(0)
       let result = await this.subject.roll(1)
       expect(result).to.have.ordered.members([1])
     })
 
     it("can roll a 2", async function() {
-      this.shoe.getNumber.resolves(1)
+      Shoe.prototype.getNumber.resolves(1)
       let result = await this.subject.roll(1)
       expect(result).to.have.ordered.members([2])
     })
 
     it("can roll multiple numbers", async function() {
-      this.shoe.getNumber.onCall(0).resolves(2)
-      this.shoe.getNumber.onCall(1).resolves(3)
-      this.shoe.getNumber.onCall(2).resolves(4)
-      this.shoe.getNumber.onCall(3).resolves(5)
+      Shoe.prototype.getNumber.onCall(0).resolves(2)
+      Shoe.prototype.getNumber.onCall(1).resolves(3)
+      Shoe.prototype.getNumber.onCall(2).resolves(4)
+      Shoe.prototype.getNumber.onCall(3).resolves(5)
 
       let result = await this.subject.roll(4)
 
@@ -50,12 +50,12 @@ describe("Bones", function() {
     })
 
     it("rejects numbers from the shoe above the maximum multiple for a 6-sided die", async function() {
-      this.shoe.getNumber.onCall(0).resolves(253)
-      this.shoe.getNumber.onCall(1).resolves(252)
-      this.shoe.getNumber.onCall(2).resolves(251)
-      this.shoe.getNumber.onCall(3).resolves(250)
-      this.shoe.getNumber.onCall(4).resolves(249)
-      this.shoe.getNumber.onCall(5).resolves(248)
+      Shoe.prototype.getNumber.onCall(0).resolves(253)
+      Shoe.prototype.getNumber.onCall(1).resolves(252)
+      Shoe.prototype.getNumber.onCall(2).resolves(251)
+      Shoe.prototype.getNumber.onCall(3).resolves(250)
+      Shoe.prototype.getNumber.onCall(4).resolves(249)
+      Shoe.prototype.getNumber.onCall(5).resolves(248)
 
       let result = await this.subject.roll(4)
 

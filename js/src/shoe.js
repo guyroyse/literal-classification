@@ -1,18 +1,14 @@
 const axios = require('axios')
 
-const QRNG_URL = "https://qrng.anu.edu.au/API/jsonI.php?type=uint8&length=512"
+const QRNG_URL = "http://qrng.anu.edu.au/API/jsonI.php?type=uint8&length=512"
 
 class Shoe {
   constructor() {
     this.numbers = []
   }
 
-  async start() {
-    await this.fetchNumbers()
-  }
-
   async getNumber() {
-    if (this.numbers.length === 1) {
+    if (this.numbers.length === 0) {
       await this.fetchNumbers()
     }
     return this.numbers.shift()
