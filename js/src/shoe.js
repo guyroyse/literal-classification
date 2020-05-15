@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const QRNG_URL = "https://qrng.anu.edu.au/API/jsonI.php?type=uint8&length=576"
+const QRNG_URL = "https://qrng.anu.edu.au/API/jsonI.php?type=uint8&length=512"
 
 class Shoe {
   constructor() {

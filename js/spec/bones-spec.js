@@ -49,7 +49,7 @@ describe("Bones", function() {
       expect(result).to.have.ordered.members([3, 4, 5, 6])
     })
 
-    it("rejects numbers above the maximum for a 6-sided die", async function() {
+    it("rejects numbers from the shoe above the maximum multiple for a 6-sided die", async function() {
       this.shoe.getNumber.onCall(0).resolves(253)
       this.shoe.getNumber.onCall(1).resolves(252)
       this.shoe.getNumber.onCall(2).resolves(251)
