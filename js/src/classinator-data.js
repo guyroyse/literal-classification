@@ -1,13 +1,14 @@
-const RedisConnection = require('../src/redis-connection')
+const RedisConnector = require('../src/redis-connector')
 
 class ClassinatorData {
   constructor() {
-    this.redisConnection = new RedisConnection()
+    this.redisConnection = new RedisConnector()
     this.redis = this.redisConnection.fetchConnection()
   }
 
   async fetchClasses() {
-    await this.redis.smembers('dnd:classinator:classes')
+    let classes = await this.redis.smembers('dnd:classinator:classes')
+    return classes.sort()
   }
 
 }
