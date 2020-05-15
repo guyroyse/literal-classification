@@ -4,6 +4,7 @@ const app = express()
 const port = 3000
 
 app.use(express.json())
+app.use(express.static('static'))
 
 const AbilityGenerator = require('./src/ability-generator')
 let abilityGenerator = new AbilityGenerator()
