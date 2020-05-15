@@ -20,6 +20,10 @@ function rollAbility() {
     .reduce((accum, roll) => { return accum + roll }, 0)
 }
 
+function rollDie() {
+  return Math.floor(Math.random() * 6) + 1
+}
+
 function times(n, fn) {
   return new Array(4)
     .fill()
