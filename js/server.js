@@ -6,6 +6,13 @@ const port = 3000
 const AbilityGenerator = require('./src/ability-generator')
 let abilityGenerator = new AbilityGenerator()
 
+const ClassinatorData = require('./src/classinator-data')
+let data = new ClassinatorData()
+
+app.get('/fetchClasses', async (req, res) => {
+  res.send(await data.fetchClasses())
+})
+
 app.get('/rollAbilities', async (req, res) => {
   res.send(await abilityGenerator.rollAbilities())
 })
