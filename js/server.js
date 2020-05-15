@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+app.use(express.json())
+
 const AbilityGenerator = require('./src/ability-generator')
 let abilityGenerator = new AbilityGenerator()
 
@@ -15,6 +17,10 @@ app.get('/fetchClasses', async (req, res) => {
 
 app.get('/rollAbilities', async (req, res) => {
   res.send(await abilityGenerator.rollAbilities())
+})
+
+app.post('/saveClassination', async (req, res) => {
+  res.send(await data.saveClassination(req.body))
 })
 
 app.listen(port, () => console.log(`Listening on http://localhost:${port}`))
