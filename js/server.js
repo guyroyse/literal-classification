@@ -6,7 +6,7 @@ const port = 3000
 const AbilityGenerator = require('./src/ability-generator')
 let abilityGenerator = new AbilityGenerator()
 
-app.get('/rollTheBones', async (req, res) => {
+app.get('/rollAbilities', async (req, res) => {
   res.send(await abilityGenerator.rollAbilities())
 })
 
