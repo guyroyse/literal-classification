@@ -2,13 +2,12 @@
   <head>
     <title>D&D Class Recommender</title>
     <link rel="stylesheet" href="site.css">
+    <script type="module" src="classify.js"></script>
   </head>
   <body>
     <h1>D&D Class Recommender</h1>
 
-    <p>Welcome to the D&D Class Recommender. Enter your ability score
-      below and we'll suggest a class for you to play. If you want to
-      help make the AI better, <a href="classify.html">select some classes</a> for us.</p>
+    <p>Select the best class for the abilities below</p>
 
     <table>
       <tbody>
@@ -21,7 +20,8 @@
       </tbody>
     </table>
 
-    <button class="classinate">Classinate</button>
+    <div id="buttons">
+    </div>
 
   </body>
 </html>
