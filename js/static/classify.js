@@ -1,61 +1,82 @@
-async function setupClassButtons() {
+let ABILITY_NAMES = [ 'strength', 'dexterity', 'constitution',
+  'intelligence', 'wisdom', 'charisma' ]
 
-  let buttons = document.querySelector('#buttons')
+class Fetcher {
+  async rollAbilities() {
+    let response = await fetch('/rollAbilities')
+    let abilities = await response.json()
+    return abilities
+  }
 
-  let classResponse = await fetch('/fetchClasses')
-  let classes = await classResponse.json()
+  async fetchClasses() {
+    let response = await fetch('/fetchClasses')
+    let classes = await response.json()
+    return classes
+  }
 
-  classes.forEach(clazz => {
-    let button = document.createElement('button')
-    button.className = 'classinate'
-    button.textContent = clazz
-    buttons.appendChild(button)
-  })
+  async saveClassination(data) {
+    await fetch('/saveClassination', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+  }
 
 }
 
-async function rollAbilities() {
+class View {
+  constructor() {
+    this.buttons = document.querySelector('#buttons')
 
-  let rollResponse = await fetch('/rollAbilities')
-  let abilities = await rollResponse.json()
+    ABILITY_NAMES.forEach(abilityName => {
+      let element = `${abilityName}Element`
+      let selector = `#${abilityName}`
 
-  document.querySelector('#strength').textContent = abilities.strength
-  document.querySelector('#dexterity').textContent = abilities.dexterity
-  document.querySelector('#constitution').textContent = abilities.constitution
-  document.querySelector('#intelligence').textContent = abilities.intelligence
-  document.querySelector('#wisdom').textContent = abilities.wisdom
-  document.querySelector('#charisma').textContent = abilities.charisma
+      this[element] = document.querySelector(selector)
 
-  return abilities
+      Object.defineProperty(this, abilityName, {
+        get: () => this[element].textContent,
+        set: value => this[element].textContent = value
+      })
+    })
+  }
+
+  addClassButton(className) {
+    let button = document.createElement('button')
+    button.className = 'classinate'
+    button.textContent = className
+    this.buttons.appendChild(button)
+    return button
+  }
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-  await setupClassButtons()
-  let abilities = await rollAbilities()
+  let fetcher = new Fetcher()
+  let view = new View()
 
-  document.querySelectorAll('.classinate').forEach(button => {
+  function abilitiesToView(rolledAbilities) {
+    ABILITY_NAMES.forEach(abilityName => view[abilityName] = rolledAbilities[abilityName])
+  }
 
-    button.addEventListener('click', async event => {
-      let clazz = event.currentTarget.textContent
-      
-      let data = {
-        strength: abilities.strength, 
-        dexterity: abilities.dexterity,
-        constitution: abilities.constitution,
-        intelligence: abilities.intelligence,
-        wisdom: abilities.wisdom,
-        charisma: abilities.charisma,
-        class: clazz
-      }
+  function viewToAbilities(view) {
+    let data = {}
+    ABILITY_NAMES.forEach(abilityName => data[abilityName] = view[abilityName])
+    return data
+  }
 
-      await fetch('/saveClassination', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+  (await fetcher.fetchClasses())
+    .map(className => view.addClassButton(className))
+    .forEach(button => {
+      button.addEventListener('click', async event => {
+        let className = event.currentTarget.textContent
+        let data = viewToAbilities(view)
+        data.class = className
+        await fetcher.saveClassination(data)
+        abilitiesToView(await fetcher.rollAbilities())
       })
-
-      rollAbilities()
     })
-  })
+
+  abilitiesToView(await fetcher.rollAbilities())
+
 })
