@@ -1,7 +1,7 @@
 const express = require('express')
 
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 app.use(express.json())
 app.use(express.static('static'))
@@ -24,4 +24,4 @@ app.post('/saveClassination', async (req, res) => {
   res.send(await data.saveClassination(req.body))
 })
 
-app.listen(port, () => console.log(`Listening on http://localhost:${port}`))
+app.listen(port, () => console.log(`Listening on port ${port}`))
